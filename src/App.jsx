@@ -8,7 +8,7 @@ function App() {
   const [isedit, setedit] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    phoneNumber: "",
+    phonenumber: "",
     email: "",
     state: "",
     city: "",
@@ -23,8 +23,10 @@ function App() {
     axios
       .post("http://sk.com/New%20folder/react_crud/api.php", formdata)
       .then((res) => {
-        console.log(res.data);
-        // setedit(false);
+        // console.log(res.data);
+        let d = res.data.data[0];
+        setFormData(d);
+        console.log(formData);
       });
   };
   const handleInputChange = (e) => {
@@ -152,7 +154,7 @@ function App() {
                       type="text"
                       className="form-control"
                       name="phoneNumber"
-                      value={formData.phoneNumber}
+                      value={formData.phonenumber}
                       onChange={handleInputChange}
                     />
                   </div>

@@ -23,3 +23,18 @@ if (isset($_POST['action']) && $_POST['action'] == 'getdata') {
 
     exit;
 }
+if (isset($_POST['action']) && $_POST['action'] == 'editdata') {
+    $query = "select * from users where id ='" . $_POST['id'] . "'";
+    $result = mysqli_query($connection, $query);
+    $arr = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $arr[] = $row;
+    }
+
+    echo json_encode([
+        'status' => 'success',
+        'data' => $arr
+    ]);
+
+    exit;
+}
