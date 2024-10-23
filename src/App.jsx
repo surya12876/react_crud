@@ -45,8 +45,9 @@ function App() {
         .post("http://sk.com/New%20folder/react_crud/api.php", formsdata)
         .then((res) => {
           if (res.data.status === "success") {
-            setedit(false);
+            console.log(res.data.success);
             getdata();
+            console.log("Success");
           }
         });
     }
@@ -73,6 +74,18 @@ function App() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+  };
+  const changedit = () => {
+    setedit(false);
+    getdata();
+    setFormData(() => ({
+      id: null,
+      name: "",
+      phonenumber: 0,
+      email: "",
+      state: "",
+      city: "",
+    }));
   };
 
   useEffect(() => {
@@ -155,6 +168,7 @@ function App() {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={changedit}
               ></button>
             </div>
             <div className="modal-body">
@@ -219,6 +233,7 @@ function App() {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={changedit}
               >
                 Close
               </button>
@@ -226,6 +241,7 @@ function App() {
                 type="button"
                 className="btn btn-primary"
                 onClick={() => update_add(formData.id)}
+                data-bs-dismiss="modal"
               >
                 {isedit ? "update" : "Add"}
               </button>

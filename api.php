@@ -43,7 +43,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_data') {
 
     $data = $_POST;
 
-    var_dump($data);
+
     $query = "UPDATE users
               SET name = '{$data['name']}', 
                   state = '{$data['state']}', 
