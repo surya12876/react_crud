@@ -1,10 +1,18 @@
 <?php
+require_once 'vendor/autoload.php';  // Include Composer's autoloader
 
-$dbHost = 'mysql-f069afb-surya12876.e.aivencloud.com';
-$dbUser = 'avnadmin';
-$dbPass = 'AVNS_-FUsCrT6h-O7zv4Ubna';
-$dbName = 'userdata';
-$dbPort = 28359;
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+
+$dotenv->load();
+
+
+// Load .env file
+
+$dbHost = $_SERVER['DB_HOST'];
+$dbUser = $_SERVER['DB_USER'];
+$dbPass = $_SERVER['DB_PASSWORD'];
+$dbName = $_SERVER['DB_NAME'];
+$dbPort = $_SERVER['DB_PORT'];
 
 
 header("Access-Control-Allow-Origin: *");
