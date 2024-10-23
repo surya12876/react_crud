@@ -38,3 +38,22 @@ if (isset($_POST['action']) && $_POST['action'] == 'editdata') {
 
     exit;
 }
+if (isset($_POST['action']) && $_POST['action'] == 'update_data') {
+
+
+    $data = $_POST;
+
+    var_dump($data);
+    $query = "UPDATE users
+              SET name = '{$data['name']}', 
+                  state = '{$data['state']}', 
+                  city = '{$data['city']}', 
+                  email = '{$data['email']}', 
+                  phonenumber = '{$data['phonenumber']}'
+              WHERE id = {$data['id']}";
+    $result = mysqli_query($connection, $query);
+    echo json_encode([
+        'status' => $result ? 'success' : 'error'
+    ]);
+    exit;
+}

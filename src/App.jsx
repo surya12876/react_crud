@@ -7,8 +7,9 @@ function App() {
   const [tabledata, settabledata] = useState([]);
   const [isedit, setedit] = useState(false);
   const [formData, setFormData] = useState({
+    id: null,
     name: "",
-    phonenumber: "",
+    phonenumber: 0,
     email: "",
     state: "",
     city: "",
@@ -29,11 +30,33 @@ function App() {
         console.log(formData);
       });
   };
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const update_add = (id) => {
+    if (isedit) {
+      let formsdata = new FormData();
+      formsdata.append("action", "update_data");
+      formsdata.append("id", id);
+      formsdata.append("name", formData.name);
+      formsdata.append("phonenumber", formData.phonenumber);
+      formsdata.append("email", formData.email);
+      formsdata.append("state", formData.state);
+      formsdata.append("city", formData.city);
+
+      axios
+        .post("http://sk.com/New%20folder/react_crud/api.php", formsdata)
+        .then((res) => {
+          if (res.data.status === "success") {
+            setedit(false);
+            getdata();
+          }
+        });
+    }
+  };
+  const handleInputChange = (e, field) => {
+    console.log(e.target.value);
+    const { value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [field]: value,
     }));
   };
 
@@ -125,7 +148,7 @@ function App() {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                add user
+                {isedit ? "edit user" : "Add user"}
               </h1>
               <button
                 type="button"
@@ -143,19 +166,19 @@ function App() {
                     <input
                       type="text"
                       className="form-control"
-                      name="name"
+                      name="names"
                       value={formData.name}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, "name")}
                     />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Phone Number</label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
-                      name="phoneNumber"
+                      name="phonenumber"
                       value={formData.phonenumber}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, "phonenumber")}
                     />
                   </div>
                   <div className="col-md-6">
@@ -165,7 +188,7 @@ function App() {
                       className="form-control"
                       name="email"
                       value={formData.email}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, "email")}
                     />
                   </div>
                   <div className="col-md-6">
@@ -175,7 +198,7 @@ function App() {
                       className="form-control"
                       name="state"
                       value={formData.state}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, "state")}
                     />
                   </div>
                   <div className="col-md-6">
@@ -185,7 +208,7 @@ function App() {
                       className="form-control"
                       name="city"
                       value={formData.city}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, "city")}
                     />
                   </div>
                 </div>
@@ -199,7 +222,11 @@ function App() {
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => update_add(formData.id)}
+              >
                 {isedit ? "update" : "Add"}
               </button>
             </div>
