@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
 import axios from "axios";
 import "./App.css";
 
 function App() {
+  const [alert, setAlertMessage] = useState("");
   const [tabledata, settabledata] = useState([]);
   const [isedit, setedit] = useState(false);
   const [formData, setFormData] = useState({
@@ -14,6 +16,40 @@ function App() {
     state: "",
     city: "",
   });
+  function exportTableToExcel(tableID, filename = "") {
+    var downloadLink;
+    var dataType = "application/vnd.ms-excel";
+    var tableSelect = document.getElementById(tableID);
+
+    var tableClone = tableSelect.cloneNode(true);
+
+    var tableHTML = tableClone.outerHTML
+      .replace(/ /g, "%20")
+      .replace(/#/g, "%23")
+      .replace(/,/g, "%2C");
+
+    filename = filename ? filename + ".xls" : "excel_data.xls";
+
+    downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if (navigator.msSaveOrOpenBlob) {
+      var blob = new Blob(["\ufeff", tableHTML], {
+        type: dataType,
+      });
+      navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+      downloadLink.href = "data:" + dataType + ", " + tableHTML;
+
+      downloadLink.download = filename;
+
+      downloadLink.click();
+    }
+
+    document.body.removeChild(downloadLink);
+  }
+
   const edituser = (id) => {
     console.log(isedit);
     setedit(true);
@@ -24,7 +60,6 @@ function App() {
     axios
       .post("http://sk.com/New%20folder/react_crud/api.php", formdata)
       .then((res) => {
-        // console.log(res.data);
         let d = res.data.data[0];
         setFormData(d);
         console.log(formData);
@@ -39,8 +74,25 @@ function App() {
       .then((res) => {
         if (res.data.status === "success") {
           console.log(res.data.success);
+          setAlertMessage(
+            <div className="alert alert-success" role="alert">
+              Deleted successfully
+            </div>
+          );
+          setTimeout(() => {
+            setAlertMessage("");
+          }, 300);
           getdata();
           console.log("Success");
+        } else {
+          setAlertMessage(
+            <div className="alert alert-danger" role="alert">
+              Something went wrong, please try again.
+            </div>
+          );
+          setTimeout(() => {
+            setAlertMessage("");
+          }, 3000);
         }
       });
   };
@@ -60,8 +112,25 @@ function App() {
         .then((res) => {
           if (res.data.status === "success") {
             console.log(res.data.success);
+            setAlertMessage(
+              <div className="alert alert-success" role="alert">
+                updated successfully
+              </div>
+            );
+            setTimeout(() => {
+              setAlertMessage("");
+            }, 3000);
             getdata();
             console.log("Success");
+          } else {
+            setAlertMessage(
+              <div className="alert alert-danger" role="alert">
+                Something went wrong, please try again.
+              </div>
+            );
+            setTimeout(() => {
+              setAlertMessage("");
+            }, 3000);
           }
         });
     } else {
@@ -78,8 +147,24 @@ function App() {
         .then((res) => {
           if (res.data.status === "success") {
             console.log(res.data.success);
+            setAlertMessage(
+              <div className="alert alert-success" role="alert">
+                added successfully
+              </div>
+            );
+            setTimeout(() => {
+              setAlertMessage("");
+            }, 3000);
             getdata();
-            console.log("Success");
+          } else {
+            setAlertMessage(
+              <div className="alert alert-danger" role="alert">
+                Something went wrong, please try again.
+              </div>
+            );
+            setTimeout(() => {
+              setAlertMessage("");
+            }, 3000);
           }
         });
     }
@@ -126,6 +211,7 @@ function App() {
 
   return (
     <>
+      {alert}
       <div className="container mt-5">
         <h2 className="text-center mb-4">User Data</h2>
         <div className="text-end mb-3">
@@ -138,8 +224,11 @@ function App() {
             add user
           </button>
         </div>
+        <button onClick={() => exportTableToExcel("tableid", "members-data")}>
+          Export Table Data To Excel File
+        </button>
         {tabledata.length > 0 ? (
-          <table className="table table-hover">
+          <table className="table table-hover" id="tableid">
             <thead className="table-dark">
               <tr>
                 <th>SNo</th>
