@@ -1,5 +1,5 @@
 <?php
-require_once 'vendor/autoload.php';  // Include Composer's autoloader
+require_once 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 
