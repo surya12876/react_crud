@@ -30,6 +30,20 @@ function App() {
         console.log(formData);
       });
   };
+  const delete_data = (id) => {
+    let formdata = new FormData();
+    formdata.append("action", "delete_data");
+    formdata.append("id", id);
+    axios
+      .post("http://sk.com/New%20folder/react_crud/api.php", formdata)
+      .then((res) => {
+        if (res.data.status === "success") {
+          console.log(res.data.success);
+          getdata();
+          console.log("Success");
+        }
+      });
+  };
   const update_add = (id) => {
     if (isedit) {
       let formsdata = new FormData();
@@ -43,6 +57,24 @@ function App() {
 
       axios
         .post("http://sk.com/New%20folder/react_crud/api.php", formsdata)
+        .then((res) => {
+          if (res.data.status === "success") {
+            console.log(res.data.success);
+            getdata();
+            console.log("Success");
+          }
+        });
+    } else {
+      let formdata = new FormData();
+      formdata.append("action", "add_data");
+      formdata.append("name", formData.name);
+      formdata.append("phonenumber", formData.phonenumber);
+      formdata.append("email", formData.email);
+      formdata.append("state", formData.state);
+      formdata.append("city", formData.city);
+
+      axios
+        .post("http://sk.com/New%20folder/react_crud/api.php", formdata)
         .then((res) => {
           if (res.data.status === "success") {
             console.log(res.data.success);
@@ -139,7 +171,12 @@ function App() {
                       edit user
                     </button>
                     {"\u00A0"} {"\u00A0"}
-                    <button className="btn btn-danger">delete</button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => delete_data(item.id)}
+                    >
+                      delete
+                    </button>
                   </td>
                 </tr>
               ))}

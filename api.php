@@ -57,3 +57,22 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_data') {
     ]);
     exit;
 }
+if (isset($_POST['action']) && $_POST['action'] == 'add_data') {
+    $data = $_POST;
+    $query = "INSERT INTO users (name, state, city, email, phonenumber) VALUES ('{$data['name']}', '{$data['state']}', '{$data['city']}', '{$data['email']}', {$data['phonenumber']})";
+    $result = mysqli_query($connection, $query);
+    if ($result) {
+        echo json_encode([
+            'status' => 'success',
+            'id' => mysqli_insert_id($connection)
+        ]);
+    }
+}
+if (isset($_POST['action']) && $_POST['action'] == 'delete_data') {
+    $query = "DELETE FROM users WHERE id = '" . $_POST['id'] . "'";
+    $result = mysqli_query($connection, $query);
+    echo json_encode([
+        'status' => $result ? 'success' : 'error'
+    ]);
+    exit;
+}
