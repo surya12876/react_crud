@@ -58,7 +58,7 @@ function App() {
     formdata.append("action", "editdata");
     formdata.append("id", id);
     axios
-      .post("http://sk.com/New%20folder/react_crud/api.php", formdata)
+      .post("https://reactcrudbackend.vercel.app/api", formdata)
       .then((res) => {
         let d = res.data.data[0];
         setFormData(d);
@@ -70,7 +70,7 @@ function App() {
     formdata.append("action", "delete_data");
     formdata.append("id", id);
     axios
-      .post("http://sk.com/New%20folder/react_crud/api.php", formdata)
+      .post("https://reactcrudbackend.vercel.app/api", formdata)
       .then((res) => {
         if (res.data.status === "success") {
           console.log(res.data.success);
@@ -108,7 +108,7 @@ function App() {
       formsdata.append("city", formData.city);
 
       axios
-        .post("http://sk.com/New%20folder/react_crud/api.php", formsdata)
+        .post("https://reactcrudbackend.vercel.app/api", formsdata)
         .then((res) => {
           if (res.data.status === "success") {
             console.log(res.data.success);
@@ -143,7 +143,7 @@ function App() {
       formdata.append("city", formData.city);
 
       axios
-        .post("http://sk.com/New%20folder/react_crud/api.php", formdata)
+        .post("https://reactcrudbackend.vercel.app/api", formdata)
         .then((res) => {
           if (res.data.status === "success") {
             console.log(res.data.success);
@@ -183,7 +183,7 @@ function App() {
     formdata.append("action", "getdata");
 
     axios
-      .post("http://sk.com/New%20folder/react_crud/api.php", formdata)
+      .post("https://reactcrudbackend.vercel.app/api", formdata)
       .then((res) => {
         console.log(res.data.data);
         settabledata(res.data.data);
